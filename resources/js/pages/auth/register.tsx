@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -21,7 +22,7 @@ export default function Register() {
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Nama</Label>
                                 <Input
@@ -34,10 +35,7 @@ export default function Register() {
                                     name="name"
                                     placeholder="Nama penuh"
                                 />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
+                                <InputError message={errors.name} className="mt-2" />
                             </div>
 
                             <div className="grid gap-2">
@@ -68,9 +66,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
-                                    Sahkan kata laluan
-                                </Label>
+                                <Label htmlFor="password_confirmation">Sahkan kata laluan</Label>
                                 <PasswordInput
                                     id="password_confirmation"
                                     required
@@ -79,19 +75,18 @@ export default function Register() {
                                     name="password_confirmation"
                                     placeholder="Ulang kata laluan"
                                 />
-                                <InputError
-                                    message={errors.password_confirmation}
-                                />
+                                <InputError message={errors.password_confirmation} />
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 w-full rounded-xl"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
                                 Cipta akaun
+                                <ArrowRight className="size-4" />
                             </Button>
                         </div>
 

@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
@@ -18,9 +19,10 @@ export default function VerifyEmail({ status }: { status?: string }) {
             <Form action="/email/verification-notification" method="post" className="space-y-6 text-center">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
+                        <Button disabled={processing} variant="secondary" className="rounded-xl">
                             {processing && <Spinner />}
                             Hantar semula pautan pengesahan
+                            <ArrowRight className="size-4" />
                         </Button>
 
                         <TextLink href={logout()} className="mx-auto block text-sm">

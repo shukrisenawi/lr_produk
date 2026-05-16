@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ClipboardList, LayoutGrid, ShieldCheck } from 'lucide-react';
+import { ClipboardList, LayoutGrid, ShieldCheck, ShoppingBag } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -11,6 +11,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { Auth, NavItem } from '@/types';
@@ -37,6 +38,11 @@ export function AppSidebar() {
                   href: '/dashboard',
                   icon: ClipboardList,
               },
+              {
+                  title: 'Beli Sekarang',
+                  href: '/checkout',
+                  icon: ShoppingBag,
+              },
           ];
 
     return (
@@ -51,6 +57,7 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
+                <SidebarSeparator />
             </SidebarHeader>
 
             <SidebarContent>

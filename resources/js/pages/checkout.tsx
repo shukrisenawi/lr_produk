@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { Minus, Plus } from 'lucide-react';
+import { Minus, Plus, Sparkles, ShoppingCart, ChevronLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -43,6 +43,11 @@ const calculatePricing = (quantity: number, pricing: Pricing) => {
         subtotal,
         shippingFee: pricing.shipping_fee,
         grandTotal: subtotal + pricing.shipping_fee,
+        breakdown: [
+            tenBottleSets > 0 && { label: 'Set 10 botol', qty: tenBottleSets, price: pricing.ten_bottle_price },
+            fiveBottleSets > 0 && { label: 'Set 5 botol', qty: fiveBottleSets, price: pricing.five_bottle_price },
+            singleBottles > 0 && { label: 'Botol biasa', qty: singleBottles, price: pricing.single_bottle_price },
+        ].filter(Boolean),
     };
 };
 
@@ -74,30 +79,41 @@ export default function Checkout({ variants, pricing }: Props) {
         );
     };
 
+    const step = (variantId: number, delta: number) => {
+        const item = data.items.find((entry) => entry.variant_id === variantId);
+        if (item) updateQuantity(variantId, item.quantity + delta);
+    };
+
     return (
         <>
             <Head title="Checkout" />
 
-            <div className="aurora-shell min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+            <div className="aurora-shell min-h-screen px-4 py-6 sm:px-6 lg:px-8">
                 <div className="mx-auto flex max-w-7xl flex-col gap-8">
                     <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium text-[#717171]">Checkout Aurora Terapi</p>
-                            <h1 className="text-3xl font-bold tracking-tight">Pilih produk dan lengkapkan pesanan</h1>
+                        <div className="space-y-1">
+                            <p className="text-sm font-medium text-muted-foreground">Aurora Terapi</p>
+                            <h1 className="text-3xl font-bold tracking-tight">Pilih & Pesan</h1>
                         </div>
-                        <Link href="/" className="text-sm font-medium text-[#717171]">
-                            Kembali ke landing page
+                        <Link href="/" className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                            <ChevronLeft className="size-4" />
+                            Kembali
                         </Link>
                     </div>
 
                     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                         <div className="space-y-6">
-                            <section className="rounded-[28px] bg-white p-6 shadow-sm">
-                                <div className="mb-5">
-                                    <h2 className="text-xl font-semibold">1. Pilih jenis produk dan bilangan</h2>
-                                    <p className="mt-1 text-sm text-[#717171]">
-                                        Anda boleh campur wangian ikut kesukaan sendiri.
-                                    </p>
+                            <section className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
+                                <div className="mb-6 flex items-center gap-3">
+                                    <div className="flex size-10 items-center justify-center rounded-xl bg-secondary text-primary">
+                                        <ShoppingCart className="size-5" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold tracking-tight">1. Pilih varian & bilangan</h2>
+                                        <p className="text-sm text-muted-foreground">
+                                            Anda boleh campur wangian ikut kesukaan sendiri.
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2">
@@ -105,22 +121,22 @@ export default function Checkout({ variants, pricing }: Props) {
                                         const item = data.items.find((entry) => entry.variant_id === variant.id)!;
 
                                         return (
-                                            <article key={variant.id} className="rounded-[22px] border border-[#ece7e7] p-4">
-                                                <div className="mb-4 aspect-[4/5] overflow-hidden rounded-[18px] bg-[#f3f3f3]">
+                                            <article key={variant.id} className="group rounded-xl border border-border/60 bg-background/50 p-4 transition-all hover:border-primary/20 hover:bg-secondary/50">
+                                                <div className="mb-4 aspect-[4/5] overflow-hidden rounded-lg bg-muted">
                                                     <img
                                                         src={`/images/aurora/${variant.slug}.png`}
                                                         alt={variant.name}
-                                                        className="h-full w-full object-cover"
+                                                        className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105"
                                                     />
                                                 </div>
                                                 <div className="space-y-3">
                                                     <div className="flex items-start justify-between gap-3">
                                                         <div>
-                                                            <h3 className="font-semibold">{variant.name}</h3>
-                                                            <p className="text-sm text-[#717171]">RM10 sebotol</p>
+                                                            <h3 className="font-bold">{variant.name}</h3>
+                                                            <p className="text-sm text-muted-foreground">RM10 sebotol</p>
                                                         </div>
                                                         {variant.is_best_seller && (
-                                                            <span className="rounded-full bg-[#fff1f3] px-3 py-1 text-xs font-semibold text-[#FF385C]">
+                                                            <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary">
                                                                 Paling Laris
                                                             </span>
                                                         )}
@@ -130,10 +146,10 @@ export default function Checkout({ variants, pricing }: Props) {
                                                         <Button
                                                             type="button"
                                                             variant="outline"
-                                                            className="size-10 rounded-full"
-                                                            onClick={() => updateQuantity(variant.id, item.quantity - 1)}
+                                                            className="size-9 rounded-xl"
+                                                            onClick={() => step(variant.id, -1)}
                                                         >
-                                                            <Minus />
+                                                            <Minus className="size-4" />
                                                         </Button>
                                                         <Input
                                                             type="number"
@@ -142,15 +158,15 @@ export default function Checkout({ variants, pricing }: Props) {
                                                             onChange={(event) =>
                                                                 updateQuantity(variant.id, Number(event.target.value))
                                                             }
-                                                            className="h-10 text-center"
+                                                            className="h-9 text-center"
                                                         />
                                                         <Button
                                                             type="button"
                                                             variant="outline"
-                                                            className="size-10 rounded-full"
-                                                            onClick={() => updateQuantity(variant.id, item.quantity + 1)}
+                                                            className="size-9 rounded-xl"
+                                                            onClick={() => step(variant.id, 1)}
                                                         >
-                                                            <Plus />
+                                                            <Plus className="size-4" />
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -158,49 +174,64 @@ export default function Checkout({ variants, pricing }: Props) {
                                         );
                                     })}
                                 </div>
-                                {errors.items && <p className="mt-4 text-sm text-red-600">{errors.items}</p>}
+                                {errors.items && <p className="mt-4 text-sm text-destructive">{errors.items}</p>}
                             </section>
 
-                            <section className="rounded-[28px] bg-white p-6 shadow-sm">
-                                <div className="mb-5">
-                                    <h2 className="text-xl font-semibold">2. Daftar ringkas untuk teruskan</h2>
-                                    <p className="mt-1 text-sm text-[#717171]">
-                                        Hanya nama, WhatsApp, kata laluan, dan alamat penghantaran.
-                                    </p>
+                            <section className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
+                                <div className="mb-6 flex items-center gap-3">
+                                    <div className="flex size-10 items-center justify-center rounded-xl bg-secondary text-primary">
+                                        <Sparkles className="size-5" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold tracking-tight">2. Daftar ringkas untuk teruskan</h2>
+                                        <p className="text-sm text-muted-foreground">
+                                            Hanya nama, WhatsApp, kata laluan, dan alamat penghantaran.
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <form
-                                    className="grid gap-4"
+                                    className="grid gap-5"
                                     onSubmit={(event) => {
                                         event.preventDefault();
                                         post('/checkout');
                                     }}
                                 >
-                                    <Input
-                                        placeholder="Nama penuh"
-                                        value={data.name}
-                                        onChange={(event) => setData('name', event.target.value)}
-                                    />
-                                    {errors.name && <p className="text-sm text-red-600">{errors.name}</p>}
-
-                                    <Input
-                                        placeholder="Nombor WhatsApp"
-                                        value={data.phone}
-                                        onChange={(event) => setData('phone', event.target.value)}
-                                    />
-                                    {errors.phone && <p className="text-sm text-red-600">{errors.phone}</p>}
-
-                                    <div className="grid gap-4 md:grid-cols-2">
+                                    <div className="grid gap-5 sm:grid-cols-2">
                                         <div className="space-y-2">
+                                            <label className="text-sm font-medium">Nama penuh</label>
+                                            <Input
+                                                placeholder="Nama penuh"
+                                                value={data.name}
+                                                onChange={(event) => setData('name', event.target.value)}
+                                            />
+                                            {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium">Nombor WhatsApp</label>
+                                            <Input
+                                                placeholder="Contoh: 0195168839"
+                                                value={data.phone}
+                                                onChange={(event) => setData('phone', event.target.value)}
+                                            />
+                                            {errors.phone && <p className="text-sm text-destructive">{errors.phone}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-5 sm:grid-cols-2">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium">Kata laluan</label>
                                             <Input
                                                 type="password"
-                                                placeholder="Kata laluan"
+                                                placeholder="Minimum 8 aksara"
                                                 value={data.password}
                                                 onChange={(event) => setData('password', event.target.value)}
                                             />
-                                            {errors.password && <p className="text-sm text-red-600">{errors.password}</p>}
+                                            {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
                                         </div>
                                         <div className="space-y-2">
+                                            <label className="text-sm font-medium">Ulang kata laluan</label>
                                             <Input
                                                 type="password"
                                                 placeholder="Ulang kata laluan"
@@ -212,68 +243,81 @@ export default function Checkout({ variants, pricing }: Props) {
                                         </div>
                                     </div>
 
-                                    <textarea
-                                        value={data.shipping_address}
-                                        onChange={(event) => setData('shipping_address', event.target.value)}
-                                        placeholder="Alamat penghantaran penuh"
-                                        className="min-h-28 rounded-2xl border border-[#e6e3e3] px-4 py-3 text-sm outline-none ring-0 transition focus:border-[#FF385C]"
-                                    />
-                                    {errors.shipping_address && (
-                                        <p className="text-sm text-red-600">{errors.shipping_address}</p>
-                                    )}
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium">Alamat penghantaran</label>
+                                        <textarea
+                                            value={data.shipping_address}
+                                            onChange={(event) => setData('shipping_address', event.target.value)}
+                                            placeholder="Alamat penghantaran penuh"
+                                            className="min-h-28 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+                                        />
+                                        {errors.shipping_address && (
+                                            <p className="text-sm text-destructive">{errors.shipping_address}</p>
+                                        )}
+                                    </div>
 
-                                    <textarea
-                                        value={data.notes}
-                                        onChange={(event) => setData('notes', event.target.value)}
-                                        placeholder="Nota tambahan jika ada"
-                                        className="min-h-24 rounded-2xl border border-[#e6e3e3] px-4 py-3 text-sm outline-none ring-0 transition focus:border-[#FF385C]"
-                                    />
-                                    {errors.notes && <p className="text-sm text-red-600">{errors.notes}</p>}
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium">Nota tambahan (pilihan)</label>
+                                        <textarea
+                                            value={data.notes}
+                                            onChange={(event) => setData('notes', event.target.value)}
+                                            placeholder="Nota tambahan jika ada"
+                                            className="min-h-24 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+                                        />
+                                        {errors.notes && <p className="text-sm text-destructive">{errors.notes}</p>}
+                                    </div>
 
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="h-12 rounded-2xl bg-[#FF385C] text-white hover:bg-[#e93052]"
+                                        className="h-12 rounded-xl bg-brand-gradient text-white shadow-md shadow-[#FF385C]/20 transition-all hover:shadow-lg"
                                     >
                                         {processing ? 'Sedang hantar...' : 'Hantar pesanan & pergi ke bayaran'}
+                                        <ArrowRight className="size-4" />
                                     </Button>
                                 </form>
                             </section>
                         </div>
 
                         <aside className="space-y-6">
-                            <section className="rounded-[28px] bg-white p-6 shadow-sm">
-                                <h2 className="text-xl font-semibold">Ringkasan bayaran</h2>
+                            <section className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
+                                <h2 className="text-xl font-bold tracking-tight">Ringkasan bayaran</h2>
                                 <div className="mt-5 space-y-4 text-sm">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[#717171]">Jumlah botol</span>
-                                        <span className="font-semibold">{totals.quantity}</span>
+                                        <span className="text-muted-foreground">Jumlah botol</span>
+                                        <span className="font-bold">{totals.quantity}</span>
                                     </div>
+                                    {totals.breakdown.map((item: any) => item && (
+                                        <div key={item.label} className="flex items-center justify-between pl-4">
+                                            <span className="text-muted-foreground">{item.label}</span>
+                                            <span className="font-medium">{formatMoney(item.qty * item.price)}</span>
+                                        </div>
+                                    ))}
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[#717171]">Subtotal produk</span>
+                                        <span className="text-muted-foreground">Subtotal</span>
                                         <span className="font-semibold">{formatMoney(totals.subtotal)}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[#717171]">Caj penghantaran tetap</span>
+                                        <span className="text-muted-foreground">Caj penghantaran tetap</span>
                                         <span className="font-semibold">{formatMoney(totals.shippingFee)}</span>
                                     </div>
-                                    <div className="h-px bg-[#ece7e7]" />
+                                    <div className="h-px bg-border" />
                                     <div className="flex items-center justify-between text-base">
-                                        <span className="font-semibold">Jumlah perlu dibayar</span>
-                                        <span className="font-bold text-[#FF385C]">
+                                        <span className="font-bold">Jumlah perlu dibayar</span>
+                                        <span className="text-xl font-black text-primary">
                                             {formatMoney(totals.grandTotal)}
                                         </span>
                                     </div>
                                 </div>
                             </section>
 
-                            <section className="overflow-hidden rounded-[28px] bg-white shadow-sm">
+                            <section className="overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm">
                                 <img
                                     src="/images/aurora/harga.png"
                                     alt="Pakej harga"
                                     className="aspect-[4/3] w-full object-cover"
                                 />
-                                <div className="space-y-3 p-6 text-sm text-[#717171]">
+                                <div className="space-y-3 p-6 text-sm text-muted-foreground">
                                     <p>5 botol akan auto jadi RM45.</p>
                                     <p>10 botol akan auto jadi RM80.</p>
                                     <p>Sistem akan kira kombinasi paling jimat untuk jumlah botol anda.</p>

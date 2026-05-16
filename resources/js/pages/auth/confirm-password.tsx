@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -23,18 +24,18 @@ export default function ConfirmPassword() {
                                 autoComplete="current-password"
                                 autoFocus
                             />
-
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="flex items-center">
                             <Button
-                                className="w-full"
+                                className="w-full rounded-xl"
                                 disabled={processing}
                                 data-test="confirm-password-button"
                             >
                                 {processing && <Spinner />}
                                 Confirm password
+                                <ArrowRight className="size-4" />
                             </Button>
                         </div>
                     </div>

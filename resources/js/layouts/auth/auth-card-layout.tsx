@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
-import AppLogoIcon from '@/components/app-logo-icon';
+import { Sparkles } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -20,28 +20,29 @@ export default function AuthCardLayout({
     description?: string;
 }>) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+        <div className="aurora-shell flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
             <div className="flex w-full max-w-md flex-col gap-6">
                 <Link
                     href={home()}
                     className="flex items-center gap-2 self-center font-medium"
                 >
-                    <div className="flex h-9 w-9 items-center justify-center">
-                        <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient shadow-lg shadow-[#FF385C]/20">
+                        <Sparkles className="size-5 text-white" />
                     </div>
+                    <span className="text-lg font-extrabold tracking-tight">
+                        Aurora <span className="text-primary">Terapi</span>
+                    </span>
                 </Link>
 
-                <div className="flex flex-col gap-6">
-                    <Card className="rounded-xl">
-                        <CardHeader className="px-10 pt-8 pb-0 text-center">
-                            <CardTitle className="text-xl">{title}</CardTitle>
-                            <CardDescription>{description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="px-10 py-8">
-                            {children}
-                        </CardContent>
-                    </Card>
-                </div>
+                <Card className="rounded-2xl border-border/50 shadow-lg">
+                    <CardHeader className="px-8 pt-8 pb-0 text-center">
+                        <CardTitle className="text-xl font-bold tracking-tight">{title}</CardTitle>
+                        <CardDescription>{description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="px-8 py-8">
+                        {children}
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

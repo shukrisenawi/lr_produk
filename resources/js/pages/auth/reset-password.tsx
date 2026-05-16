@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,7 @@ export default function ResetPassword({ token, email }: Props) {
                 resetOnSuccess={['password', 'password_confirmation']}
             >
                 {({ processing, errors }) => (
-                    <div className="grid gap-6">
+                    <div className="grid gap-5">
                         <div className="grid gap-2">
                             <Label htmlFor="email">E-mel</Label>
                             <Input
@@ -35,10 +36,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 className="mt-1 block w-full"
                                 readOnly
                             />
-                            <InputError
-                                message={errors.email}
-                                className="mt-2"
-                            />
+                            <InputError message={errors.email} className="mt-2" />
                         </div>
 
                         <div className="grid gap-2">
@@ -55,9 +53,7 @@ export default function ResetPassword({ token, email }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password_confirmation">
-                                Sahkan kata laluan
-                            </Label>
+                            <Label htmlFor="password_confirmation">Sahkan kata laluan</Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
@@ -65,20 +61,18 @@ export default function ResetPassword({ token, email }: Props) {
                                 className="mt-1 block w-full"
                                 placeholder="Ulang kata laluan"
                             />
-                            <InputError
-                                message={errors.password_confirmation}
-                                className="mt-2"
-                            />
+                            <InputError message={errors.password_confirmation} className="mt-2" />
                         </div>
 
                         <Button
                             type="submit"
-                            className="mt-4 w-full"
+                            className="mt-4 w-full rounded-xl"
                             disabled={processing}
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
                             Reset kata laluan
+                            <ArrowRight className="size-4" />
                         </Button>
                     </div>
                 )}

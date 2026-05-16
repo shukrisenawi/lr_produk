@@ -7,12 +7,13 @@ import {
     Star,
     ShieldCheck,
     Zap,
-    Users,
-    Truck,
     Heart,
     Quote,
     ChevronRight,
+    Menu,
+    X,
 } from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { login, register } from '@/routes';
@@ -158,27 +159,27 @@ const navLinks = [
 ];
 
 export default function Welcome({ variants }: Props) {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     return (
         <>
             <Head title="Aurora Terapi - Minyak Panas Roll-On" />
 
-            <div className="relative min-h-screen overflow-x-hidden bg-[#fdfdfd] selection:bg-[#FF385C]/20 selection:text-[#FF385C]">
-                {/* Background Decor */}
+            <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-[#FF385C]/20 selection:text-[#FF385C]">
                 <div className="pointer-events-none fixed inset-0 -z-10">
                     <div className="absolute top-[-5%] left-[-5%] h-[600px] w-[600px] rounded-full bg-[#FF385C]/[0.06] blur-[150px]" />
                     <div className="absolute top-[30%] right-[-8%] h-[500px] w-[500px] rounded-full bg-[#FF385C]/[0.04] blur-[120px]" />
                     <div className="absolute bottom-[-5%] left-[15%] h-[700px] w-[700px] rounded-full bg-[#FF385C]/[0.05] blur-[180px]" />
                 </div>
 
-                {/* Navbar */}
                 <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-4">
-                    <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-2xl border border-white/30 bg-white/70 px-6 py-3 shadow-lg shadow-black/[0.03] backdrop-blur-2xl">
+                    <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-2xl border border-border/30 bg-card/80 px-6 py-3 shadow-lg shadow-black/[0.02] backdrop-blur-2xl">
                         <Link href="/" className="flex items-center gap-2.5">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF385C] to-[#e93052] shadow-md shadow-[#FF385C]/20">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-gradient shadow-md shadow-[#FF385C]/20">
                                 <Sparkles className="size-5 text-white" />
                             </div>
                             <span className="text-lg font-extrabold tracking-tight">
-                                Aurora <span className="text-[#FF385C]">Terapi</span>
+                                Aurora <span className="text-primary">Terapi</span>
                             </span>
                         </Link>
 
@@ -187,7 +188,7 @@ export default function Welcome({ variants }: Props) {
                                 <a
                                     key={link.href}
                                     href={link.href}
-                                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-[#FF385C]"
+                                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                                 >
                                     {link.label}
                                 </a>
@@ -203,30 +204,59 @@ export default function Welcome({ variants }: Props) {
                             </Link>
                             <Button
                                 asChild
-                                className="h-10 rounded-xl bg-gradient-to-r from-[#FF385C] to-[#e93052] px-5 text-sm font-bold text-white shadow-md shadow-[#FF385C]/20 transition-all hover:shadow-lg hover:shadow-[#FF385C]/30 active:scale-95"
+                                className="h-10 rounded-xl bg-brand-gradient px-5 text-sm font-bold text-white shadow-md shadow-[#FF385C]/20 transition-all hover:shadow-lg hover:shadow-[#FF385C]/30 active:scale-95"
                             >
                                 <Link href={checkoutIndex.url()} className="flex items-center gap-2">
                                     Beli Sekarang
                                     <ArrowRight className="size-4" />
                                 </Link>
                             </Button>
+                            <button
+                                className="flex items-center justify-center md:hidden"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+                            </button>
                         </div>
                     </nav>
+
+                    {mobileMenuOpen && (
+                        <div className="mx-auto mt-2 max-w-7xl rounded-2xl border border-border/30 bg-card/95 p-4 shadow-xl backdrop-blur-2xl md:hidden">
+                            <div className="flex flex-col gap-2">
+                                {navLinks.map((link) => (
+                                    <a
+                                        key={link.href}
+                                        href={link.href}
+                                        className="rounded-xl px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-primary"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                                <Link
+                                    href={login.url()}
+                                    className="rounded-xl px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    Log masuk
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </header>
 
                 <main className="mx-auto max-w-7xl px-4 pt-32 sm:px-6 lg:px-8">
-                    {/* ── Hero ── */}
-                    <section className="relative grid min-h-[75vh] items-center gap-12 overflow-hidden rounded-[48px] bg-white p-8 shadow-2xl shadow-black/[0.03] lg:grid-cols-[1.1fr_0.9fr] lg:p-16">
-                        <div className="absolute top-0 right-0 -z-10 h-full w-1/2 bg-gradient-to-l from-[#fff5f6] to-transparent" />
+                    <section className="relative grid min-h-[75vh] items-center gap-12 overflow-hidden rounded-[48px] bg-card p-8 shadow-2xl shadow-black/[0.02] lg:grid-cols-[1.1fr_0.9fr] lg:p-16">
+                        <div className="absolute top-0 right-0 -z-10 h-full w-1/2 bg-gradient-to-l from-secondary to-transparent" />
 
                         <div className="flex flex-col gap-8">
                             <div className="space-y-5">
-                                <Badge className="w-fit animate-fade-up rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1.5 text-sm font-bold text-[#FF385C] shadow-none">
+                                <Badge className="w-fit animate-fade-up rounded-full border border-primary/10 bg-secondary px-4 py-1.5 text-sm font-bold text-primary shadow-none">
                                     Sapu. Urut. Rasa selesa.
                                 </Badge>
                                 <h2 className="animate-fade-up text-balance text-5xl font-extrabold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl" style={{ animationDelay: '100ms' }}>
                                     Minyak panas{' '}
-                                    <span className="bg-gradient-to-r from-[#FF385C] to-[#e93052] bg-clip-text text-transparent">
+                                    <span className="text-brand-gradient">
                                         roll-on
                                     </span>{' '}
                                     yang tak leceh
@@ -241,7 +271,7 @@ export default function Welcome({ variants }: Props) {
                                 <Button
                                     asChild
                                     size="lg"
-                                    className="h-14 rounded-2xl bg-gradient-to-r from-[#FF385C] to-[#e93052] px-8 text-base font-bold text-white shadow-xl shadow-[#FF385C]/20 transition-all hover:translate-y-[-2px] hover:shadow-2xl hover:shadow-[#FF385C]/30 active:scale-95"
+                                    className="h-14 rounded-2xl bg-brand-gradient px-8 text-base font-bold text-white shadow-xl shadow-[#FF385C]/20 transition-all hover:translate-y-[-2px] hover:shadow-2xl hover:shadow-[#FF385C]/30 active:scale-95"
                                 >
                                     <Link href={checkoutIndex.url()} className="flex items-center gap-2">
                                         <PackageCheck className="size-5" />
@@ -252,7 +282,7 @@ export default function Welcome({ variants }: Props) {
                                     asChild
                                     variant="outline"
                                     size="lg"
-                                    className="h-14 rounded-2xl border-2 border-border bg-white px-8 text-base font-semibold transition-all hover:bg-[#fff5f6] hover:border-[#FF385C]/20 active:scale-95"
+                                    className="h-14 rounded-2xl border-2 border-border bg-card px-8 text-base font-semibold transition-all hover:bg-secondary hover:border-primary/20 active:scale-95"
                                 >
                                     <Link href={register.url()} className="flex items-center gap-2">
                                         Daftar Ringkas
@@ -264,7 +294,7 @@ export default function Welcome({ variants }: Props) {
                             <div className="animate-fade-up flex items-center gap-6 pt-2" style={{ animationDelay: '400ms' }}>
                                 <div className="flex -space-x-3">
                                     {[1, 2, 3, 4].map((i) => (
-                                        <div key={i} className="size-10 overflow-hidden rounded-full border-2 border-white bg-muted shadow-sm">
+                                        <div key={i} className="size-10 overflow-hidden rounded-full border-2 border-card bg-muted shadow-sm">
                                             <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="" className="size-full object-cover" />
                                         </div>
                                     ))}
@@ -279,20 +309,20 @@ export default function Welcome({ variants }: Props) {
                         </div>
 
                         <div className="animate-fade-in relative aspect-square lg:aspect-auto lg:h-full" style={{ animationDelay: '200ms' }}>
-                            <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-[#fff5f6] via-white to-white shadow-inner" />
+                            <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-secondary via-card to-card shadow-inner" />
                             <img
                                 src="/images/aurora/hero.png"
                                 alt="Aurora Terapi"
                                 className="h-full w-full object-contain drop-shadow-[0_30px_80px_rgba(255,56,92,0.2)] transition-all duration-700 hover:scale-105"
                             />
                             <div className="absolute right-6 top-6 sm:right-10 sm:top-10">
-                                <div className="animate-bounce rounded-2xl bg-white/80 p-4 shadow-xl shadow-black/[0.04] backdrop-blur-md">
-                                    <p className="text-xs font-bold uppercase tracking-wider text-[#FF385C]">Harga Serendah</p>
+                                <div className="animate-bounce rounded-2xl bg-card/80 p-4 shadow-xl shadow-black/[0.04] backdrop-blur-md">
+                                    <p className="text-xs font-bold uppercase tracking-wider text-primary">Harga Serendah</p>
                                     <p className="text-2xl font-black italic tracking-tight">RM10</p>
                                 </div>
                             </div>
                             <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10">
-                                <div className="animate-bounce rounded-2xl bg-white/80 p-4 shadow-xl shadow-black/[0.04] backdrop-blur-md" style={{ animationDelay: '1s' }}>
+                                <div className="animate-bounce rounded-2xl bg-card/80 p-4 shadow-xl shadow-black/[0.04] backdrop-blur-md" style={{ animationDelay: '1s' }}>
                                     <div className="flex items-center gap-3">
                                         <div className="flex size-10 items-center justify-center rounded-full bg-green-100">
                                             <ShieldCheck className="size-5 text-green-600" />
@@ -307,10 +337,9 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Benefits ── */}
                     <section id="manfaat" className="py-28">
                         <div className="mb-14 space-y-4 text-center">
-                            <Badge className="rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none">
+                            <Badge className="rounded-full border border-primary/10 bg-secondary px-4 py-1 text-sm font-bold text-primary shadow-none">
                                 Kenapa Aurora Terapi?
                             </Badge>
                             <h3 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl">
@@ -325,10 +354,10 @@ export default function Welcome({ variants }: Props) {
                             {benefits.map((benefit, idx) => (
                                 <article
                                     key={benefit.title}
-                                    className="group animate-fade-up relative flex flex-col rounded-[32px] bg-white p-8 shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02] transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FF385C]/5 hover:ring-[#FF385C]/10"
+                                    className="group animate-fade-up card-hover relative flex flex-col rounded-[32px] bg-card p-8 shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02]"
                                     style={{ animationDelay: `${idx * 80}ms` }}
                                 >
-                                    <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-[#fff5f6] text-[#FF385C] transition-all duration-300 group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-[#FF385C] group-hover:to-[#e93052] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#FF385C]/20">
+                                    <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-secondary text-primary transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-gradient group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#FF385C]/20">
                                         <benefit.icon className="size-7" />
                                     </div>
                                     <h4 className="text-xl font-bold">{benefit.title}</h4>
@@ -338,7 +367,6 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Siapa Sesuai ── */}
                     <section className="relative overflow-hidden rounded-[48px] bg-gradient-to-br from-[#FF385C] to-[#e93052] px-8 py-20 shadow-2xl lg:px-16 lg:py-24">
                         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_50%)]" />
                         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.06),transparent_50%)]" />
@@ -371,7 +399,6 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Story Sections ── */}
                     <div className="space-y-28 py-28">
                         {sections.map((section, idx) => (
                             <section
@@ -381,7 +408,7 @@ export default function Welcome({ variants }: Props) {
                                 <div className={`animate-fade-up space-y-6 ${idx % 2 !== 0 ? 'lg:order-2' : ''}`}>
                                     <Badge
                                         variant="outline"
-                                        className="rounded-full border-[#FF385C]/20 px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none"
+                                        className="rounded-full border-primary/20 px-4 py-1 text-sm font-bold text-primary shadow-none"
                                     >
                                         {section.tag}
                                     </Badge>
@@ -389,8 +416,8 @@ export default function Welcome({ variants }: Props) {
                                         {section.title}
                                     </h3>
                                     <p className="text-lg leading-relaxed text-muted-foreground">{section.body}</p>
-                                    <div className="flex items-center gap-4 rounded-3xl bg-[#fff5f6] p-6">
-                                        <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white text-[#FF385C] shadow-sm">
+                                    <div className="flex items-center gap-4 rounded-3xl bg-secondary p-6">
+                                        <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-card text-primary shadow-sm">
                                             <CheckCircle2 className="size-6" />
                                         </div>
                                         <p className="font-medium">Membantu memberi rasa nyaman pada badan yang penat atau lenguh.</p>
@@ -411,34 +438,33 @@ export default function Welcome({ variants }: Props) {
                         ))}
                     </div>
 
-                    {/* ── Usage Steps + Daily Uses ── */}
                     <section className="grid gap-8 py-16 lg:grid-cols-2">
-                        <div className="animate-fade-up rounded-[40px] bg-white p-8 shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.02] lg:p-12">
+                        <div className="animate-fade-up rounded-[40px] bg-card p-8 shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.02] lg:p-12">
                             <div className="mb-8 space-y-4">
-                                <Badge className="rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none">
+                                <Badge className="rounded-full border border-primary/10 bg-secondary px-4 py-1 text-sm font-bold text-primary shadow-none">
                                     Cara Guna
                                 </Badge>
                                 <h3 className="text-4xl font-extrabold tracking-tight">Semudah 1, 2, 3...</h3>
                                 <p className="text-lg text-muted-foreground">Tak perlu picit, tak perlu tuang. Hanya roll dan rasa keajaibannya.</p>
                             </div>
                             <div className="grid gap-4">
-                                {usageSteps.map((step, index) => (
+                                {usageSteps.map((step) => (
                                     <div
                                         key={step.text}
-                                        className="group flex items-center gap-6 rounded-2xl bg-[#fafafa] p-5 transition-all hover:bg-[#fff5f6] hover:shadow-sm"
+                                        className="group flex items-center gap-6 rounded-2xl bg-muted/50 p-5 transition-all hover:bg-secondary hover:shadow-sm"
                                     >
-                                        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF385C] to-[#e93052] text-lg font-black text-white shadow-md shadow-[#FF385C]/20">
+                                        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-lg font-black text-white shadow-md shadow-[#FF385C]/20">
                                             {step.number}
                                         </span>
-                                        <p className="text-lg font-bold transition-colors group-hover:text-[#FF385C]">{step.text}</p>
+                                        <p className="text-lg font-bold transition-colors group-hover:text-primary">{step.text}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="animate-fade-up rounded-[40px] bg-white p-8 shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.02] lg:p-12" style={{ animationDelay: '150ms' }}>
+                        <div className="animate-fade-up rounded-[40px] bg-card p-8 shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.02] lg:p-12" style={{ animationDelay: '150ms' }}>
                             <div className="mb-8 space-y-4">
-                                <Badge className="rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none">
+                                <Badge className="rounded-full border border-primary/10 bg-secondary px-4 py-1 text-sm font-bold text-primary shadow-none">
                                     Bila Nak Guna?
                                 </Badge>
                                 <h3 className="text-4xl font-extrabold tracking-tight">Kegunaan Harian</h3>
@@ -448,9 +474,9 @@ export default function Welcome({ variants }: Props) {
                                 {dailyUses.map((use) => (
                                     <div
                                         key={use}
-                                        className="flex items-start gap-4 rounded-xl p-3 transition-all hover:bg-[#fff5f6]"
+                                        className="flex items-start gap-4 rounded-xl p-3 transition-all hover:bg-secondary"
                                     >
-                                        <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#FF385C]/10 text-[#FF385C]">
+                                        <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                                             <CheckCircle2 className="size-3.5" />
                                         </div>
                                         <p className="text-sm font-medium leading-relaxed text-muted-foreground">{use}</p>
@@ -460,10 +486,9 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Variants ── */}
                     <section id="pilihan-wangian" className="py-28">
                         <div className="mb-14 space-y-4 text-center">
-                            <Badge className="rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none">
+                            <Badge className="rounded-full border border-primary/10 bg-secondary px-4 py-1 text-sm font-bold text-primary shadow-none">
                                 Pilihan Wangian
                             </Badge>
                             <h3 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl">
@@ -478,10 +503,10 @@ export default function Welcome({ variants }: Props) {
                             {variants.map((variant, idx) => (
                                 <div
                                     key={variant.id}
-                                    className="group animate-fade-up relative flex flex-col overflow-hidden rounded-[32px] bg-white shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02] transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#FF385C]/10 hover:ring-[#FF385C]/10"
+                                    className="group animate-fade-up card-hover relative flex flex-col overflow-hidden rounded-[32px] bg-card shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02]"
                                     style={{ animationDelay: `${idx * 80}ms` }}
                                 >
-                                    <div className="relative aspect-[4/5] overflow-hidden bg-[#fafafa]">
+                                    <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                                         <img
                                             src={`/images/aurora/${variant.slug}.png`}
                                             alt={variant.name}
@@ -489,7 +514,7 @@ export default function Welcome({ variants }: Props) {
                                         />
                                         {variant.is_best_seller && (
                                             <div className="absolute right-3 top-3">
-                                                <Badge className="rounded-full bg-gradient-to-r from-[#FF385C] to-[#e93052] px-3 py-1 text-[11px] font-bold text-white shadow-lg shadow-[#FF385C]/30">
+                                                <Badge className="rounded-full bg-brand-gradient px-3 py-1 text-[11px] font-bold text-white shadow-lg shadow-[#FF385C]/30">
                                                     Paling Laris
                                                 </Badge>
                                             </div>
@@ -502,7 +527,7 @@ export default function Welcome({ variants }: Props) {
                                         </div>
                                         <Button
                                             asChild
-                                            className="mt-5 w-full rounded-xl border border-[#FF385C]/10 bg-transparent font-semibold text-foreground shadow-none transition-all hover:bg-[#FF385C] hover:text-white"
+                                            className="mt-5 w-full rounded-xl border border-primary/10 bg-transparent font-semibold text-foreground shadow-none transition-all hover:bg-primary hover:text-white"
                                         >
                                             <Link href={checkoutIndex.url()}>Pilih Varian</Link>
                                         </Button>
@@ -512,10 +537,9 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Testimonials ── */}
                     <section className="py-16">
                         <div className="mb-14 space-y-4 text-center">
-                            <Badge className="rounded-full border border-[#FF385C]/10 bg-[#fff5f6] px-4 py-1 text-sm font-bold text-[#FF385C] shadow-none">
+                            <Badge className="rounded-full border border-primary/10 bg-secondary px-4 py-1 text-sm font-bold text-primary shadow-none">
                                 Testimonial
                             </Badge>
                             <h3 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl">
@@ -526,13 +550,13 @@ export default function Welcome({ variants }: Props) {
                             {testimonials.map((t, idx) => (
                                 <div
                                     key={t.name}
-                                    className="animate-fade-up rounded-[32px] bg-white p-8 shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02] transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FF385C]/5"
+                                    className="animate-fade-up card-hover rounded-[32px] bg-card p-8 shadow-sm shadow-black/[0.02] ring-1 ring-black/[0.02]"
                                     style={{ animationDelay: `${idx * 100}ms` }}
                                 >
-                                    <Quote className="mb-4 size-8 text-[#FF385C]/20" />
+                                    <Quote className="mb-4 size-8 text-primary/20" />
                                     <p className="leading-relaxed text-muted-foreground">&ldquo;{t.text}&rdquo;</p>
                                     <div className="mt-6 flex items-center gap-3 border-t border-border pt-6">
-                                        <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-[#FF385C] to-[#e93052] text-sm font-bold text-white">
+                                        <div className="flex size-10 items-center justify-center rounded-full bg-brand-gradient text-sm font-bold text-white">
                                             {t.name[0]}
                                         </div>
                                         <div>
@@ -549,7 +573,6 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Pricing ── */}
                     <section id="harga" className="py-16">
                         <div className="relative overflow-hidden rounded-[48px] bg-[#121212] px-8 py-16 shadow-2xl lg:px-16 lg:py-20">
                             <div className="pointer-events-none absolute top-0 right-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(255,56,92,0.12),transparent_50%)]" />
@@ -557,7 +580,7 @@ export default function Welcome({ variants }: Props) {
 
                             <div className="relative z-10 space-y-16">
                                 <div className="mx-auto max-w-2xl space-y-4 text-center">
-                                    <Badge className="rounded-full bg-[#FF385C] px-4 py-1 text-sm font-bold text-white shadow-none hover:bg-[#FF385C]">
+                                    <Badge className="rounded-full bg-primary px-4 py-1 text-sm font-bold text-white shadow-none hover:bg-primary">
                                         Pakej Jimat
                                     </Badge>
                                     <h3 className="text-balance text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
@@ -574,14 +597,14 @@ export default function Welcome({ variants }: Props) {
                                             key={item.quantity}
                                             className={`animate-fade-up group relative flex flex-col rounded-[32px] p-8 transition-all hover:scale-[1.02] ${
                                                 item.popular
-                                                    ? 'bg-gradient-to-b from-[#FF385C] to-[#e93052] shadow-2xl shadow-[#FF385C]/30'
+                                                    ? 'bg-brand-gradient shadow-2xl shadow-[#FF385C]/30'
                                                     : 'border border-white/[0.06] bg-white/[0.04] backdrop-blur-sm hover:bg-white/[0.08]'
                                             }`}
                                             style={{ animationDelay: `${idx * 100}ms` }}
                                         >
                                             {item.popular && (
                                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                                    <span className="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-[11px] font-black uppercase tracking-[0.15em] text-[#FF385C] shadow-xl">
+                                                    <span className="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-[11px] font-black uppercase tracking-[0.15em] text-primary shadow-xl">
                                                         Paling Berbaloi
                                                     </span>
                                                 </div>
@@ -606,7 +629,7 @@ export default function Welcome({ variants }: Props) {
                                                     asChild
                                                     className={`w-full rounded-2xl font-bold shadow-lg transition-all ${
                                                         item.popular
-                                                            ? 'bg-white text-[#FF385C] hover:bg-white/90 hover:shadow-xl'
+                                                            ? 'bg-white text-primary hover:bg-white/90 hover:shadow-xl'
                                                             : 'bg-white/[0.08] text-white hover:bg-white/20'
                                                     }`}
                                                 >
@@ -620,7 +643,6 @@ export default function Welcome({ variants }: Props) {
                         </div>
                     </section>
 
-                    {/* ── Final CTA ── */}
                     <section className="py-24">
                         <div className="relative overflow-hidden rounded-[48px] bg-gradient-to-br from-[#FF385C] via-[#e93052] to-[#d42a48] px-8 py-20 text-center text-white shadow-2xl lg:px-20 lg:py-28">
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)]" />
@@ -636,7 +658,7 @@ export default function Welcome({ variants }: Props) {
                                     <Button
                                         asChild
                                         size="lg"
-                                        className="h-16 rounded-2xl bg-white px-10 text-lg font-bold text-[#FF385C] shadow-2xl transition-all hover:bg-white/95 hover:translate-y-[-2px] active:scale-95"
+                                        className="h-16 rounded-2xl bg-white px-10 text-lg font-bold text-primary shadow-2xl transition-all hover:bg-white/95 hover:translate-y-[-2px] active:scale-95"
                                     >
                                         <Link href={checkoutIndex.url()} className="flex items-center gap-2">
                                             <PackageCheck className="size-6" />
@@ -653,41 +675,34 @@ export default function Welcome({ variants }: Props) {
                                     </Button>
                                 </div>
                                 <div className="animate-fade-up flex flex-wrap justify-center gap-8 pt-8" style={{ animationDelay: '300ms' }}>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex size-8 items-center justify-center rounded-full bg-white/15">
-                                            <Truck className="size-4" />
+                                    {[
+                                        { icon: PackageCheck, text: 'Penghantaran Pantas' },
+                                        { icon: ShieldCheck, text: 'Pembayaran Selamat' },
+                                        { icon: Heart, text: 'Pilihan Pelbagai Aroma' },
+                                    ].map((item) => (
+                                        <div key={item.text} className="flex items-center gap-3">
+                                            <div className="flex size-8 items-center justify-center rounded-full bg-white/15">
+                                                <item.icon className="size-4" />
+                                            </div>
+                                            <span className="text-sm font-medium text-white/70">{item.text}</span>
                                         </div>
-                                        <span className="text-sm font-medium text-white/70">Penghantaran Pantas</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex size-8 items-center justify-center rounded-full bg-white/15">
-                                            <ShieldCheck className="size-4" />
-                                        </div>
-                                        <span className="text-sm font-medium text-white/70">Pembayaran Selamat</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex size-8 items-center justify-center rounded-full bg-white/15">
-                                            <Heart className="size-4" />
-                                        </div>
-                                        <span className="text-sm font-medium text-white/70">Pilihan Pelbagai Aroma</span>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     </section>
                 </main>
 
-                {/* ── Footer ── */}
-                <footer className="border-t border-border bg-white">
+                <footer className="border-t border-border bg-card">
                     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr]">
                             <div className="space-y-5">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF385C] to-[#e93052] shadow-md">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient shadow-md">
                                         <Sparkles className="size-6 text-white" />
                                     </div>
                                     <span className="text-xl font-extrabold tracking-tight">
-                                        Aurora <span className="text-[#FF385C]">Terapi</span>
+                                        Aurora <span className="text-primary">Terapi</span>
                                     </span>
                                 </div>
                                 <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -698,21 +713,21 @@ export default function Welcome({ variants }: Props) {
                             <div>
                                 <h5 className="mb-4 text-sm font-bold uppercase tracking-widest text-muted-foreground">Navigasi</h5>
                                 <ul className="space-y-3 text-sm">
-                                    <li><Link href="/" className="font-medium text-foreground transition-colors hover:text-[#FF385C]">Laman Utama</Link></li>
-                                    <li><a href="#manfaat" className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Manfaat</a></li>
-                                    <li><a href="#pilihan-wangian" className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Wangian</a></li>
-                                    <li><a href="#harga" className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Harga</a></li>
-                                    <li><Link href={checkoutIndex.url()} className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Beli Sekarang</Link></li>
+                                    <li><Link href="/" className="font-medium text-foreground transition-colors hover:text-primary">Laman Utama</Link></li>
+                                    <li><a href="#manfaat" className="font-medium text-muted-foreground transition-colors hover:text-primary">Manfaat</a></li>
+                                    <li><a href="#pilihan-wangian" className="font-medium text-muted-foreground transition-colors hover:text-primary">Wangian</a></li>
+                                    <li><a href="#harga" className="font-medium text-muted-foreground transition-colors hover:text-primary">Harga</a></li>
+                                    <li><Link href={checkoutIndex.url()} className="font-medium text-muted-foreground transition-colors hover:text-primary">Beli Sekarang</Link></li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 className="mb-4 text-sm font-bold uppercase tracking-widest text-muted-foreground">Pelanggan</h5>
                                 <ul className="space-y-3 text-sm">
-                                    <li><Link href={login.url()} className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Log Masuk</Link></li>
-                                    <li><Link href={register.url()} className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Daftar Akaun</Link></li>
-                                    <li><Link href={checkoutIndex.url()} className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Semak Pesanan</Link></li>
-                                    <li><Link href="#" className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Terma & Syarat</Link></li>
-                                    <li><Link href="#" className="font-medium text-muted-foreground transition-colors hover:text-[#FF385C]">Polisi Privasi</Link></li>
+                                    <li><Link href={login.url()} className="font-medium text-muted-foreground transition-colors hover:text-primary">Log Masuk</Link></li>
+                                    <li><Link href={register.url()} className="font-medium text-muted-foreground transition-colors hover:text-primary">Daftar Akaun</Link></li>
+                                    <li><Link href={checkoutIndex.url()} className="font-medium text-muted-foreground transition-colors hover:text-primary">Semak Pesanan</Link></li>
+                                    <li><Link href="#" className="font-medium text-muted-foreground transition-colors hover:text-primary">Terma & Syarat</Link></li>
+                                    <li><Link href="#" className="font-medium text-muted-foreground transition-colors hover:text-primary">Polisi Privasi</Link></li>
                                 </ul>
                             </div>
                         </div>

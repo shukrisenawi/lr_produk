@@ -1,6 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useMemo, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,17 +43,21 @@ export default function TwoFactorChallenge() {
                         <>
                             {showRecoveryInput ? (
                                 <>
-                                    <Input
-                                        name="recovery_code"
-                                        type="text"
-                                        placeholder="Masukkan kod pemulihan"
-                                        autoFocus
-                                        required
-                                    />
-                                    <InputError message={errors.recovery_code} />
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Kod pemulihan</label>
+                                        <Input
+                                            name="recovery_code"
+                                            type="text"
+                                            placeholder="Masukkan kod pemulihan"
+                                            autoFocus
+                                            required
+                                        />
+                                        <InputError message={errors.recovery_code} />
+                                    </div>
                                 </>
                             ) : (
                                 <div className="flex flex-col items-center justify-center gap-3 text-center">
+                                    <label className="text-sm font-medium">Kod autentikasi</label>
                                     <InputOTP
                                         name="code"
                                         maxLength={OTP_MAX_LENGTH}
@@ -72,15 +77,16 @@ export default function TwoFactorChallenge() {
                                 </div>
                             )}
 
-                            <Button type="submit" className="w-full" disabled={processing}>
+                            <Button type="submit" className="w-full rounded-xl" disabled={processing}>
                                 Teruskan
+                                <ArrowRight className="size-4" />
                             </Button>
 
                             <div className="text-center text-sm text-muted-foreground">
                                 <span>Atau </span>
                                 <button
                                     type="button"
-                                    className="cursor-pointer text-foreground underline underline-offset-4"
+                                    className="cursor-pointer font-medium text-primary underline underline-offset-4"
                                     onClick={() => {
                                         setShowRecoveryInput(!showRecoveryInput);
                                         clearErrors();

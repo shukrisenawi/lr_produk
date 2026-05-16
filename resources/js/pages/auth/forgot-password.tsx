@@ -1,6 +1,5 @@
-// Components
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, ArrowLeft } from 'lucide-react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -33,13 +32,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     autoFocus
                                     placeholder="email@example.com"
                                 />
-
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="my-6 flex items-center justify-start">
                                 <Button
-                                    className="w-full"
+                                    className="w-full rounded-xl"
                                     disabled={processing}
                                     data-test="email-password-reset-link-button"
                                 >
@@ -53,7 +51,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     )}
                 </Form>
 
-                <div className="space-x-1 text-center text-sm text-muted-foreground">
+                <div className="flex items-center justify-center gap-1 text-center text-sm text-muted-foreground">
+                    <ArrowLeft className="size-3.5" />
                     <span>Kembali ke</span>
                     <TextLink href={login()}>log masuk</TextLink>
                 </div>
